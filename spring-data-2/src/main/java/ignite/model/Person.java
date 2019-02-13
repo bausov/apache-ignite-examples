@@ -10,10 +10,12 @@ public class Person {
     private String firstName;
     @QuerySqlField(index = true)
     private String secondName;
+    private int counter;
 
-    public Person(String firstName, String secondName) {
+    public Person(String firstName, String secondName, int counter) {
         this.firstName = firstName;
         this.secondName = secondName;
+        this.counter = counter;
     }
 
     public String getFirstName() {
@@ -32,11 +34,20 @@ public class Person {
         this.secondName = secondName;
     }
 
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
+    }
+
     @Override
     public String toString() {
-        return "ignite.model.Person{" +
-                "firstName='" + firstName + '\'' +
-                ", secondName='" + secondName + '\'' +
+        return "Person{" +
+                "firstName= '" + firstName + '\'' +
+                ", secondName= '" + secondName + '\'' +
+                ", counter= " + counter +
                 '}';
     }
 

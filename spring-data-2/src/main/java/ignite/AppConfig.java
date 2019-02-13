@@ -10,6 +10,8 @@ import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.configuration.NearCacheConfiguration;
 import org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi;
 import org.apache.ignite.springdata20.repository.config.EnableIgniteRepositories;
+import org.apache.ignite.transactions.TransactionConcurrency;
+import org.apache.ignite.transactions.spring.SpringTransactionManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -20,13 +22,12 @@ import org.springframework.context.annotation.Configuration;
 @EnableIgniteRepositories
 @SuppressWarnings("all")
 public class AppConfig {
+    private final String instanceName = "ignite-client";
 //        zkDiscoSpi.setZkRootPath(""); couldn't be empty
 //        ccfg.setAffinity(new TestAffinityFunction(partitionsNumber, backupsNumber));
 //        cfg.setConsistentId()
-
     @Bean
-    public Ignite igniteInstance() {
-        final String instanceName = "ignite-client";
+    public IgniteConfiguration igniteConfiguration() {
 
         IgniteConfiguration cfg = new IgniteConfiguration();
         cfg.setClientMode(true);
@@ -55,13 +56,38 @@ public class AppConfig {
         zkDiscoSpi.setJoinTimeout(10_000);
         cfg.setDiscoverySpi(zkDiscoSpi);
 
+        return cfg;
+    }
+
+    @Bean
+    public Ignite igniteInstance() {
         // Connect to the cluster.
-        final Ignite ignite = Ignition.start(cfg);
+        final Ignite ignite = Ignition.start(igniteConfiguration());
 
         // Activate the cluster. Automatic topology initialization occurs
         // only if you manually activate the cluster for the very first time.
         ignite.cluster().active(true);
 
+//        ignite.transactions().txStart(null, null);
+
         return ignite;
+    }
+
+    @Bean("optimisticTransactionManager")
+    public SpringTransactionManager igniteTransactionManagerOpt() {
+        final SpringTransactionManager transactionManager = new SpringTransactionManager();
+        transactionManager.setIgniteInstanceName(instanceName);
+        transactionManager.setTransactionConcurrency(TransactionConcurrency.OPTIMISTIC);
+
+        return transactionManager;
+    }
+
+    @Bean("pessimisticTransactionManager")
+    public SpringTransactionManager igniteTransactionManagerPes() {
+        final SpringTransactionManager transactionManager = new SpringTransactionManager();
+        transactionManager.setIgniteInstanceName(instanceName);
+        transactionManager.setTransactionConcurrency(TransactionConcurrency.PESSIMISTIC);
+
+        return transactionManager;
     }
 }
