@@ -9,7 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import java.util.Scanner;
 
-@SpringBootApplication(scanBasePackages = {"ignite.*"})
+@SpringBootApplication
 public class SpringData2Application implements CommandLineRunner {
     private final PersonRepository repository;
 
