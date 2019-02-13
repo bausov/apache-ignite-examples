@@ -8,12 +8,15 @@ import org.apache.ignite.cache.eviction.lru.LruEvictionPolicy;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.configuration.NearCacheConfiguration;
+import org.apache.ignite.spi.discovery.DiscoverySpi;
 import org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi;
 import org.apache.ignite.springdata20.repository.config.EnableIgniteRepositories;
 import org.apache.ignite.transactions.TransactionConcurrency;
 import org.apache.ignite.transactions.spring.SpringTransactionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
 
 /**
  * Created by GreenNun on 2019-02-11.
@@ -27,7 +30,7 @@ public class AppConfig {
 //        ccfg.setAffinity(new TestAffinityFunction(partitionsNumber, backupsNumber));
 //        cfg.setConsistentId()
     @Bean
-    public IgniteConfiguration igniteConfiguration() {
+    public IgniteConfiguration igniteConfiguration(@Autowired DiscoverySpi discoverySpi) {
 
         IgniteConfiguration cfg = new IgniteConfiguration();
         cfg.setClientMode(true);
@@ -50,19 +53,37 @@ public class AppConfig {
         ccfg.setRebalanceMode(CacheRebalanceMode.SYNC);
         cfg.setCacheConfiguration(ccfg);
 
-        ZookeeperDiscoverySpi zkDiscoSpi = new ZookeeperDiscoverySpi();
-        zkDiscoSpi.setZkConnectionString("zookeeper:2181");
-        zkDiscoSpi.setSessionTimeout(30_000);
-        zkDiscoSpi.setJoinTimeout(10_000);
-        cfg.setDiscoverySpi(zkDiscoSpi);
+
+        cfg.setDiscoverySpi(discoverySpi);
 
         return cfg;
     }
 
     @Bean
-    public Ignite igniteInstance() {
+    @Profile("docker")
+    public DiscoverySpi discoverySpiDocker() {
+        ZookeeperDiscoverySpi zkDiscoSpi = new ZookeeperDiscoverySpi();
+        zkDiscoSpi.setZkConnectionString("zookeeper:2181");
+        zkDiscoSpi.setSessionTimeout(30_000);
+        zkDiscoSpi.setJoinTimeout(10_000);
+
+        return zkDiscoSpi;
+    }
+
+    @Bean
+    public DiscoverySpi discoverySpi() {
+        ZookeeperDiscoverySpi zkDiscoSpi = new ZookeeperDiscoverySpi();
+        zkDiscoSpi.setZkConnectionString("localhost:2181");
+        zkDiscoSpi.setSessionTimeout(30_000);
+        zkDiscoSpi.setJoinTimeout(10_000);
+
+        return zkDiscoSpi;
+    }
+
+    @Bean
+    public Ignite igniteInstance(@Autowired IgniteConfiguration igniteConfiguration) {
         // Connect to the cluster.
-        final Ignite ignite = Ignition.start(igniteConfiguration());
+        final Ignite ignite = Ignition.start(igniteConfiguration);
 
         // Activate the cluster. Automatic topology initialization occurs
         // only if you manually activate the cluster for the very first time.
