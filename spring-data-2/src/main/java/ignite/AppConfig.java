@@ -51,7 +51,7 @@ public class AppConfig {
         cfg.setCacheConfiguration(ccfg);
 
         ZookeeperDiscoverySpi zkDiscoSpi = new ZookeeperDiscoverySpi();
-        zkDiscoSpi.setZkConnectionString("localhost:2181");
+        zkDiscoSpi.setZkConnectionString("zookeeper:2181");
         zkDiscoSpi.setSessionTimeout(30_000);
         zkDiscoSpi.setJoinTimeout(10_000);
         cfg.setDiscoverySpi(zkDiscoSpi);

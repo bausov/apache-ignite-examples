@@ -1,0 +1,32 @@
+version: '2.1'
+services:
+
+  zookeeper:
+    image: wurstmeister/zookeeper
+    ports:
+      - "2181:2181"
+
+  client:
+    build: spring-data-2
+    expose:
+      - 5050
+    ports:
+      - "5050:5050"
+      - "10801:10800"
+      - "11212:11211"
+    restart: always
+    depends_on:
+      zookeeper:
+        condition: service_started
+      server:
+        condition: service_started
+
+  server:
+    build: server-node
+    ports:
+      - "10800:10800"
+      - "11211:11211"
+    restart: always
+    depends_on:
+      zookeeper:
+        condition: service_started

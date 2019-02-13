@@ -4,14 +4,16 @@ import ignite.model.Person;
 import ignite.repository.PersonRepository;
 import ignite.service.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-
-import java.util.Scanner;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 @SpringBootApplication
-public class SpringData2Application implements CommandLineRunner {
+@RestController
+//public class SpringData2Application implements CommandLineRunner {
+public class SpringData2Application {
     private final PersonRepository repository;
     private final RepositoryService service;
 
@@ -25,17 +27,19 @@ public class SpringData2Application implements CommandLineRunner {
         SpringApplication.run(SpringData2Application.class, args);
     }
 
-    @Override
-    public void run(String... args) throws Exception {
+    //    @Override
+//    public void run(String... args) throws Exception {
+    @RequestMapping("/{myLine}")
+    public void run(@PathVariable("myLine") String myLine) throws Exception {
 
-        while (true) {
+//        while (true) {
             final Person person = new Person("name", "secondNmae", 0);
 
-            System.out.println("PRESS: ");
-            Scanner scan = new Scanner(System.in);
-            String myLine = scan.nextLine();
+//            System.out.println("PRESS: ");
+//            Scanner scan = new Scanner(System.in);
+//            String myLine = scan.nextLine();
 
-            if (myLine.equals("exit")) break;
+//            if (myLine.equals("exit")) break;
             if (myLine.equals("1")) {
                 for (int i = 0; i < 10; i++) {
                     System.out.println("PUT: " + repository.save((long) i, person));
@@ -87,6 +91,6 @@ public class SpringData2Application implements CommandLineRunner {
                     service.transactionP(-1, "2", 500);
                 }).start();
             }
-        }
+//        }
     }
 }
