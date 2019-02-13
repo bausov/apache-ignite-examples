@@ -3,8 +3,11 @@ package ignite;
 import ignite.model.Person;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
+import org.apache.ignite.cache.*;
+import org.apache.ignite.cache.eviction.lru.LruEvictionPolicy;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
+import org.apache.ignite.configuration.NearCacheConfiguration;
 import org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi;
 import org.apache.ignite.springdata20.repository.config.EnableIgniteRepositories;
 import org.springframework.context.annotation.Bean;
@@ -30,15 +33,21 @@ public class AppConfig {
         cfg.setIgniteInstanceName(instanceName);
         cfg.setPeerClassLoadingEnabled(true);
 
-        CacheConfiguration ccfg = new CacheConfiguration("PersonCache");
-        ccfg.setIndexedTypes(Long.class, Person.class);
-        cfg.setCacheConfiguration(ccfg);
+        NearCacheConfiguration<Long, Person> nearCfg = new NearCacheConfiguration<>();
+        nearCfg.setNearEvictionPolicy(new LruEvictionPolicy<>(10_000));
+        nearCfg.setNearStartSize(1_000);
 
-        // Ignite persistence configuration.
-//        DataStorageConfiguration storageCfg = new DataStorageConfiguration();
-//        storageCfg.getDefaultDataRegionConfiguration().setPersistenceEnabled(true);
-//        storageCfg.setWalMode(WALMode.FSYNC);
-//        cfg.setDataStorageConfiguration(storageCfg);
+        CacheConfiguration ccfg = new CacheConfiguration("PersonCache");
+        ccfg.setNearConfiguration(nearCfg);
+        ccfg.setIndexedTypes(Long.class, Person.class);
+        ccfg.setGroupName("group1");
+        ccfg.setCacheMode(CacheMode.PARTITIONED);
+        ccfg.setPartitionLossPolicy(PartitionLossPolicy.READ_WRITE_SAFE);
+        ccfg.setAtomicityMode(CacheAtomicityMode.TRANSACTIONAL);
+        ccfg.setWriteSynchronizationMode(CacheWriteSynchronizationMode.FULL_SYNC);
+        ccfg.setBackups(2);
+        ccfg.setRebalanceMode(CacheRebalanceMode.SYNC);
+        cfg.setCacheConfiguration(ccfg);
 
         ZookeeperDiscoverySpi zkDiscoSpi = new ZookeeperDiscoverySpi();
         zkDiscoSpi.setZkConnectionString("localhost:2181");
