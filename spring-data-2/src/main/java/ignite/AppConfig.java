@@ -4,7 +4,7 @@ import ignite.model.Person;
 import org.apache.ignite.Ignite;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.cache.*;
-import org.apache.ignite.cache.eviction.lru.LruEvictionPolicy;
+import org.apache.ignite.cache.eviction.fifo.FifoEvictionPolicyFactory;
 import org.apache.ignite.configuration.CacheConfiguration;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.configuration.NearCacheConfiguration;
@@ -38,7 +38,8 @@ public class AppConfig {
         cfg.setPeerClassLoadingEnabled(true);
 
         NearCacheConfiguration<Long, Person> nearCfg = new NearCacheConfiguration<>();
-        nearCfg.setNearEvictionPolicy(new LruEvictionPolicy<>(10_000));
+//        nearCfg.setNearEvictionPolicy(new LruEvictionPolicy<>(10_000)); // deprecated
+        nearCfg.setNearEvictionPolicyFactory(new FifoEvictionPolicyFactory<>(10_000));
         nearCfg.setNearStartSize(1_000);
 
         CacheConfiguration ccfg = new CacheConfiguration("PersonCache");
