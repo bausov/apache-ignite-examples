@@ -10,6 +10,7 @@ public class Person {
     private String firstName;
     @QuerySqlField(index = true)
     private String secondName;
+    @QuerySqlField
     private int counter;
 
     public Person(String firstName, String secondName, int counter) {

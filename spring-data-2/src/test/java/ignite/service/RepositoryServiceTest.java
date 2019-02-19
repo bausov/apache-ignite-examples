@@ -14,11 +14,14 @@ import org.apache.ignite.transactions.TransactionConcurrency;
 import org.apache.ignite.transactions.spring.SpringTransactionManager;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.transaction.ChainedTransactionManager;
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.PlatformTransactionManager;
 
 import java.util.Optional;
@@ -26,22 +29,25 @@ import java.util.Optional;
 /**
  * Created by GreenNun on 2019-02-13.
  */
-//@RunWith(SpringRunner.class)
+@RunWith(SpringRunner.class)
 //@SpringBootTest
+@ContextConfiguration(classes = RepositoryServiceTest.AppConfig.class)
 public class RepositoryServiceTest {
-    private static PersonRepository repository;
-    private static RepositoryService service;
+    @Autowired
+    private PersonRepository repository;
+    @Autowired
+    private RepositoryService service;
 
     @BeforeClass
     public static void setUp() {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
-        context.register(RepositoryServiceTest.AppConfig.class);
-        context.register(PersonRepository.class);
-        context.refresh();
-
-
-        repository = context.getBean(PersonRepository.class);
-        service = new RepositoryService(repository);
+//        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+//        context.register(RepositoryServiceTest.AppConfig.class);
+//        context.register(PersonRepository.class);
+//        context.refresh();
+//
+//
+//        repository = context.getBean(PersonRepository.class);
+//        service = new RepositoryService(repository);
     }
 
     @Test
@@ -62,6 +68,14 @@ public class RepositoryServiceTest {
     @SuppressWarnings("all")
     public static class AppConfig {
         private final String instanceName = "ignite-client";
+
+        @Autowired
+        private PersonRepository repository;
+
+        @Bean
+        public RepositoryService repositoryService() {
+            return new RepositoryService(repository);
+        }
 
         @Bean
         public IgniteConfiguration igniteConfiguration() {

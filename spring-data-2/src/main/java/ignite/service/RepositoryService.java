@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
+
 /**
  * Created by GreenNun on 2019-02-13.
  */
@@ -29,6 +31,10 @@ public class RepositoryService {
         tx(add, thread, delay);
     }
 
+    public void read() {
+        System.out.println("BY COUNTER: " + repository.findAllByCounter(0));
+    }
+
     private void tx(int add, String thread, long delay) {
         for (int i = 0; i < 10; i++) {
             final Person person = repository.findById((long) i).get();
@@ -41,5 +47,10 @@ public class RepositoryService {
                 e.printStackTrace();
             }
         }
+    }
+
+    @PostConstruct
+    private void init() {
+        repository.findAll();
     }
 }
