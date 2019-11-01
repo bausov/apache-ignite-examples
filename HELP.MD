@@ -4,6 +4,8 @@ https://www.gridgain.com/docs/latest/installation-guide/installing-using-docker
 sudo docker run -d gridgain/community
 # Run specific GridGain version
 sudo docker run -d gridgain/community:8.7.6
+# Expose all ports
+sudo docker run --network host -d gridgain/community:8.7.6
 
 
 # Running GridGain with Java 9 or later
