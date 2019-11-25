@@ -1,0 +1,16 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd">
+    <bean class="org.apache.ignite.configuration.IgniteConfiguration">
+
+        <property name="discoverySpi">
+            <bean class="org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi">
+                <property name="zkConnectionString" value="${ZOOKEEPER_CONNECT}"/>
+                <property name="sessionTimeout" value="30000"/>
+                <!--                <property name="zkRootPath" value="/apacheIgnite"/>-->
+                <property name="joinTimeout" value="10000"/>
+            </bean>
+        </property>
+    </bean>
+</beans>

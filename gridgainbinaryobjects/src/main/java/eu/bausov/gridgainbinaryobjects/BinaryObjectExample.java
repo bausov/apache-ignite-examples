@@ -24,12 +24,12 @@ public class BinaryObjectExample {
 
     public static void main(String[] args) throws IgniteException {
         IgniteConfiguration cfg = new IgniteConfiguration();
-        cfg.setClientMode(false);
-        cfg.setPeerClassLoadingEnabled(true);
+        cfg.setClientMode(true);
+        cfg.setPeerClassLoadingEnabled(false);
 
         // Setting up an IP Finder to ensure the client can locate the servers.
         TcpDiscoveryMulticastIpFinder ipFinder = new TcpDiscoveryMulticastIpFinder();
-        ipFinder.setAddresses(Collections.singletonList("127.0.0.1:47500..47509"));
+        ipFinder.setAddresses(Collections.singletonList("127.0.0.1:32794..32797"));
         cfg.setDiscoverySpi(new TcpDiscoverySpi().setIpFinder(ipFinder));
 
         // Starting a thick Java client that will connect to the cluster.

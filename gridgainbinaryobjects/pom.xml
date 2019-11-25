@@ -17,7 +17,7 @@
     <properties>
         <java.version>13</java.version>
         <spring-cloud.version>Hoxton.RC1</spring-cloud.version>
-        <gridgain.version>8.7.6</gridgain.version>
+        <gridgain.version>8.7.7</gridgain.version>
         <h2.version>1.4.197</h2.version>
     </properties>
 
@@ -26,6 +26,17 @@
             <groupId>org.gridgain</groupId>
             <artifactId>ignite-core</artifactId>
             <version>${gridgain.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.gridgain</groupId>
+            <artifactId>ignite-zookeeper</artifactId>
+            <version>${gridgain.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.slf4j</groupId>
+                    <artifactId>slf4j-log4j12</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 <!--        <dependency>-->
 <!--            <groupId>org.gridgain</groupId>-->
@@ -106,6 +117,14 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>13</source>
+                    <target>13</target>
+                </configuration>
             </plugin>
         </plugins>
     </build>
