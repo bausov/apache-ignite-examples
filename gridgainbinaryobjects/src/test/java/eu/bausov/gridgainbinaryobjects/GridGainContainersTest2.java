@@ -28,7 +28,7 @@ class GridGainContainersTest2 {
     @ClassRule
     public static GenericContainer gridGain = new GenericContainer("gridgain/community:8.7.7")
             .withNetwork(network)
-            .withNetworkAliases("zookeeper")
+            .withNetworkAliases("server-node-0")
             .withEnv("ZOOKEEPER_CONNECT", "zookeeper:2181")
             .withEnv("CONFIG_URI", "/config-file.xml")
             .withEnv("OPTION_LIBS", "ignite-zookeeper")
