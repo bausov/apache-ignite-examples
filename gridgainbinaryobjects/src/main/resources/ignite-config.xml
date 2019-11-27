@@ -6,9 +6,9 @@
 
         <property name="discoverySpi">
             <bean class="org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi">
-                <property name="zkConnectionString" value="${ZOOKEEPER_CONNECT}"/>
+                <property name="zkConnectionString" value="#{systemEnvironment['ZOOKEEPER_CONNECT']}"/>
                 <property name="sessionTimeout" value="30000"/>
-                <!--                <property name="zkRootPath" value="/apacheIgnite"/>-->
+                <property name="zkRootPath" value="/apacheIgnite"/>
                 <property name="joinTimeout" value="10000"/>
             </bean>
         </property>
