@@ -47,7 +47,7 @@ class GridGainContainersTest {
 
         String address = zookeeperContainer.getContainerIpAddress();
         Integer port = zookeeperContainer.getFirstMappedPort();
-        final var zookeeperConnect = address + ":" + port;
+        final String zookeeperConnect = address + ":" + port;
 
         igniteContainer.addEnv("ZOOKEEPER_CONNECT", zookeeperConnect);
         igniteContainer.addEnv("CONFIG_URI", "/config-file.xml");
@@ -66,7 +66,7 @@ class GridGainContainersTest {
 
         String address = zookeeperContainer.getContainerIpAddress();
         Integer port = zookeeperContainer.getFirstMappedPort();
-        final var zookeeperConnect = address + ":" + port;
+        final String zookeeperConnect = address + ":" + port;
 
         final ZookeeperDiscoverySpi zkDiscoSpi = new ZookeeperDiscoverySpi();
         zkDiscoSpi.setZkConnectionString(zookeeperConnect);

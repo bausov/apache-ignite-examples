@@ -9,8 +9,10 @@
                 <property name="zkConnectionString" value="#{systemEnvironment['ZOOKEEPER_CONNECT']}"/>
                 <property name="sessionTimeout" value="30000"/>
                 <property name="zkRootPath" value="/apacheIgnite"/>
-                <property name="joinTimeout" value="10000"/>
+                <property name="joinTimeout" value="100000"/>
             </bean>
         </property>
+
+        <property name="peerClassLoadingEnabled" value="true"/>
     </bean>
 </beans>
