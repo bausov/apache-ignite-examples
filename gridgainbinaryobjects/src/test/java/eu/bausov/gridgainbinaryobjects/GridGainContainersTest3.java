@@ -5,7 +5,6 @@ import org.apache.ignite.Ignite;
 import org.apache.ignite.IgniteCache;
 import org.apache.ignite.Ignition;
 import org.apache.ignite.binary.BinaryObject;
-import org.apache.ignite.binary.BinaryObjectBuilder;
 import org.apache.ignite.configuration.IgniteConfiguration;
 import org.apache.ignite.spi.discovery.zk.ZookeeperDiscoverySpi;
 import org.junit.ClassRule;
@@ -14,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.testcontainers.containers.BindMode;
 import org.testcontainers.containers.GenericContainer;
+
+import java.util.UUID;
 
 /**
  * Created by Stanislav Bausov on 01.11.2019.
@@ -71,24 +72,19 @@ class GridGainContainersTest3 {
         log.info("\n\n\n>>>> " + binaryPerson.<Person>deserialize().toString());
 
         // The EntryProcessor is to be executed for this key.
-        int key = 1;
-        ignite.cache("personCache")
-                .<Integer, BinaryObject>withKeepBinary()
-                .invoke(key, (entry, arguments) -> {
-                    // Create a builder from the old value.
-                    BinaryObjectBuilder bldr = entry.getValue().toBuilder();
-
-                    //Update the field in the builder.
-                    bldr.setField("name", "GridGain");
-
-                    // Set new value to the entry.
-                    entry.setValue(bldr.build());
-
-                    return null;
-                });
-
-        log.info("\n\n\n>>>> " + binaryCache.get(1).<Person>deserialize().toString());
+        final PersonProcessor entryProcessor = new PersonProcessor();
+        runProcessor(ignite, binaryCache, entryProcessor);
+        runProcessor(ignite, binaryCache, entryProcessor);
+        runProcessor(ignite, binaryCache, entryProcessor);
 
         ignite.close();
+    }
+
+    private void runProcessor(Ignite ignite, IgniteCache<Integer, BinaryObject> binaryCache, PersonProcessor entryProcessor) {
+        ignite.cache("personCache")
+                .<Integer, BinaryObject>withKeepBinary()
+                .invoke(1, entryProcessor, UUID.randomUUID().toString());
+
+        log.info("\n\n\n>>>> " + binaryCache.get(1).<Person>deserialize().toString() + "\n\n\n");
     }
 }
