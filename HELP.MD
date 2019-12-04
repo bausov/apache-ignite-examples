@@ -28,3 +28,11 @@ https://intellij-support.jetbrains.com/hc/en-us/community/posts/360001797820-How
 
 --add-exports=java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED
 ###### Used for fast object construction during marshalling/unmarshalling.
+
+###### COPY:
+--add-exports=java.base/jdk.internal.misc=ALL-UNNAMED
+--illegal-access=permit
+--add-exports=java.base/sun.nio.ch=ALL-UNNAMED
+--add-exports=java.management/com.sun.jmx.mbeanserver=ALL-UNNAMED
+--add-exports=jdk.internal.jvmstat/sun.jvmstat.monitor=ALL-UNNAMED
+--add-exports=java.base/sun.reflect.generics.reflectiveObjects=ALL-UNNAMED
