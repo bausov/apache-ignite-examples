@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://maven.apache.org/POM/4.0.0"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <parent>
@@ -17,18 +17,20 @@
     <properties>
         <java.version>8</java.version>
         <spring-cloud.version>Hoxton.RC1</spring-cloud.version>
-        <gridgain.version>8.7.7</gridgain.version>
+        <gridgain.version>2.10.0</gridgain.version>
         <h2.version>1.4.197</h2.version>
+        <!--        <wmq.version>7.5.0.2</wmq.version>-->
+        <!--        <wmq.version>RELEASE</wmq.version>-->
     </properties>
 
     <dependencies>
         <dependency>
-            <groupId>org.gridgain</groupId>
+            <groupId>org.apache.ignite</groupId>
             <artifactId>ignite-core</artifactId>
             <version>${gridgain.version}</version>
         </dependency>
         <dependency>
-            <groupId>org.gridgain</groupId>
+            <groupId>org.apache.ignite</groupId>
             <artifactId>ignite-zookeeper</artifactId>
             <version>${gridgain.version}</version>
             <exclusions>
@@ -38,11 +40,11 @@
                 </exclusion>
             </exclusions>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.gridgain</groupId>-->
-<!--            <artifactId>ignite-spring</artifactId>-->
-<!--            <version>${gridgain.version}</version>-->
-<!--        </dependency>-->
+        <!--        <dependency>-->
+        <!--            <groupId>org.apache.ignite</groupId>-->
+        <!--            <artifactId>ignite-spring</artifactId>-->
+        <!--            <version>${gridgain.version}</version>-->
+        <!--        </dependency>-->
 
 
         <dependency>
@@ -82,7 +84,7 @@
         <dependency>
             <groupId>org.testcontainers</groupId>
             <artifactId>testcontainers</artifactId>
-            <version>1.12.3</version>
+            <version>1.15.3</version>
             <scope>test</scope>
         </dependency>
         <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
@@ -122,8 +124,8 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
-                    <source>13</source>
-                    <target>13</target>
+                    <source>8</source>
+                    <target>8</target>
                 </configuration>
             </plugin>
         </plugins>
