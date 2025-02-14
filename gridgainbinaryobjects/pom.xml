@@ -17,7 +17,7 @@
     <properties>
         <java.version>8</java.version>
         <spring-cloud.version>Hoxton.RC1</spring-cloud.version>
-        <gridgain.version>2.10.0</gridgain.version>
+        <gridgain.version>2.17.0</gridgain.version>
         <h2.version>1.4.197</h2.version>
         <!--        <wmq.version>7.5.0.2</wmq.version>-->
         <!--        <wmq.version>RELEASE</wmq.version>-->
